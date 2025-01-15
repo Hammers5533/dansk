@@ -1,8 +1,22 @@
 package intepreter
 
+import "fmt"
+
 // Statements
 type Statement interface {
 	EvalStatement(env *Env) interface{}
+}
+
+type Body struct {
+	Body []Statement
+}
+
+func (b Body) EvalStatement(env *Env) interface{} {
+	for i := range len(b.Body) {
+		val := b.Body[i].EvalStatement(env)
+		fmt.Println(val)
+	}
+	return 0
 }
 
 type Assign struct {
@@ -26,5 +40,10 @@ func (e ExpStatementWrapper) EvalStatement(env *Env) interface{} {
 type FuncDef struct {
 	Name       string
 	Parameters []string
-	Body       Exp
+	Body       Statement
+}
+
+func (f FuncDef) EvalStatement(env *Env) interface{} {
+	env.Functions[f.Name] = f
+	return 0
 }

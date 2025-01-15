@@ -7,7 +7,11 @@ type Value interface {
 	EvalValue(env *Env) interface{}
 }
 
-type Float struct{ Value float32 }
+type Float struct{ Value float64 }
+
+func (f Float) EvalValue(env *Env) interface{} {
+	return f.Value
+}
 
 type Integer struct{ Value int }
 
@@ -16,6 +20,10 @@ func (i Integer) EvalValue(env *Env) interface{} {
 }
 
 type String struct{ Value string }
+
+func (s String) EvalValue(env *Env) interface{} {
+	return s.Value
+}
 
 type Variable struct{ Value string }
 
@@ -28,7 +36,8 @@ func (v Variable) EvalValue(env *Env) interface{} {
 	return val
 }
 
-type Env struct {
-	Variables map[string]interface{}
-	Functions map[string]FuncDef
+type Bool struct{ Value bool }
+
+func (b Bool) EvalValue(env *Env) interface{} {
+	return b.Value
 }

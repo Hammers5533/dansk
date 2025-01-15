@@ -1,9 +1,7 @@
 package intepreter
 
-import "fmt"
-
 type Program struct {
-	Statements []Statement
+	Body Statement
 }
 
 func (p Program) Run() int {
@@ -11,9 +9,11 @@ func (p Program) Run() int {
 		Variables: make(map[string]interface{}),
 		Functions: make(map[string]FuncDef),
 	}
-	for i := range len(p.Statements) {
-		val := p.Statements[i].EvalStatement(env)
-		fmt.Println(val)
-	}
+	p.Body.EvalStatement(env)
 	return 0
+}
+
+type Env struct {
+	Variables map[string]interface{}
+	Functions map[string]FuncDef
 }

@@ -51,8 +51,38 @@ func statement(tokenType token.TokenType, statementFun statementHandler) {
 }
 
 func createTokenLookups() {
-
 	// Binary Operators
 	led(token.PLUS, additive, parseBinaryExpression)
 	led(token.MINUS, additive, parseBinaryExpression)
+	led(token.MULTIPLY, multiplicative, parseBinaryExpression)
+	led(token.DIVIDE, multiplicative, parseBinaryExpression)
+
+	//Logical
+	led(token.AND, logical, parseBinaryExpression)
+	led(token.OR, logical, parseBinaryExpression)
+
+	//Relational
+	led(token.GEQ, relational, parseBinaryExpression)
+	led(token.LEQ, relational, parseBinaryExpression)
+	led(token.LT, relational, parseBinaryExpression)
+	led(token.GT, relational, parseBinaryExpression)
+	led(token.NEQ, relational, parseBinaryExpression)
+	led(token.EQ, relational, parseBinaryExpression)
+
+	// Values
+	nud(token.INTEGER, parseValue)
+	nud(token.IDENTIFIER, parseValue)
+	nud(token.STRING, parseValue)
+	nud(token.FLOAT, parseValue)
+
+	// Bools
+	nud(token.TRUE, parseValue)
+	nud(token.FALSE, parseValue)
+
+	// Grouping
+	nud(token.RIGHTPARENTHESIS, parseGroupExpression)
+
+	// Statements
+	statement(token.FUNCTION, parseFunctionDeclaration)
+	statement(token.LET, parseAssignment)
 }

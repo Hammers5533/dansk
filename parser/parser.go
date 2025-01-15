@@ -12,19 +12,15 @@ type Parser struct {
 
 func New(tokens []token.Token) *Parser {
 	p := &Parser{tokens: tokens}
-
+	createTokenLookups()
 	return p
 }
 
-func (p *Parser) ParseProgram() *intepreter.Program {
-	program := &intepreter.Program{}
-	program.Statements = []intepreter.Statement{}
+func ParseProgram(tokens []token.Token) *intepreter.Program {
+	p := New(tokens)
 
-	for p.hasTokens() {
-		stmt := parseStatement(p)
-		if stmt != nil {
-			program.Statements = append(program.Statements, stmt)
-		}
-	}
+	program := &intepreter.Program{}
+	program.Body = parseManyStatements(p)
+
 	return program
 }

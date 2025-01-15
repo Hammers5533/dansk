@@ -14,23 +14,33 @@ const (
 	IDENTIFIER = "IDENTIFIER"
 	INTEGER    = "INTEGER"
 	FLOAT      = "FLOAT"
+	STRING     = "STRING"
 
-	ASSIGN   = "="
+	ASSIGN      = "="
+	PLUSASSIGN  = "+="
+	MINUSASSIGN = "-="
+
 	PLUS     = "+"
 	MINUS    = "-"
 	MULTIPLY = "*"
 	DIVIDE   = "/"
+	MODULUS  = "%"
 
 	LT  = "<"
 	GT  = ">"
 	LEQ = "<="
 	GEQ = ">="
+	NEQ = "!="
+	EQ  = "=="
+
 	AND = "AND"
 	OR  = "OR"
+
 	NOT = "NOT"
 
 	COMMA     = ","
 	SEMICOLON = ";"
+	DOT       = "."
 
 	LEFTPARENTHESIS  = "("
 	RIGHTPARENTHESIS = ")"
@@ -48,7 +58,7 @@ const (
 	IN       = "IN"
 	WHILE    = "WHILE"
 	FOR      = "FOR"
-	TRY      = "PRØV"
+	TRY      = "TRY"
 	EXCEPT   = "EXCEPT"
 	FINALLY  = "FINALLY"
 	THROW    = "THROW"

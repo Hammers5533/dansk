@@ -2,6 +2,7 @@ package main
 
 import (
 	"dklang/lexer"
+	"dklang/parser"
 	"os"
 
 	"github.com/sanity-io/litter"
@@ -23,8 +24,11 @@ func main() {
 	tokens := lexer.Tokenize(s)
 	litter.Dump(tokens)
 
-	//var p *parser.Parser = parser.New(tokens)
+	program := parser.ParseProgram(tokens)
+	litter.Dump(program)
 
-	//program := p.ParseProgram()
-	//litter.Dump(program)
+	if program != nil {
+		program.Run()
+	}
+
 }
