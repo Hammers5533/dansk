@@ -80,9 +80,13 @@ func createTokenLookups() {
 	nud(token.FALSE, parseValue)
 
 	// Grouping
-	nud(token.RIGHTPARENTHESIS, parseGroupExpression)
+	nud(token.LEFTPARENTHESIS, parseGroupExpression)
+
+	// Function Calls
+	led(token.LEFTPARENTHESIS, call, parseFunctionCall)
 
 	// Statements
 	statement(token.FUNCTION, parseFunctionDeclaration)
 	statement(token.LET, parseAssignment)
+	statement(token.RETURN, parseReturn)
 }

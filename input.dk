@@ -1,5 +1,6 @@
-lad variable = 10,12;
-
-funktion abe(ja . meget . godt) {
-    10 + 4;
+funktion abe(ja.meget.godt) {
+    lad boye = ja + meget + godt;
+    udlever boye;
 }
+
+abe(10.2.4);

@@ -1,7 +1,11 @@
 package intepreter
 
+import (
+	"fmt"
+)
+
 type Program struct {
-	Body Statement
+	Body []Statement
 }
 
 func (p Program) Run() int {
@@ -9,7 +13,15 @@ func (p Program) Run() int {
 		Variables: make(map[string]interface{}),
 		Functions: make(map[string]FuncDef),
 	}
-	p.Body.EvalStatement(env)
+	for _, statement := range p.Body {
+		switch statement.(type) {
+		case Body:
+			panic("Cannot parse body inside another body")
+		default:
+			val := statement.EvalStatement(env)
+			fmt.Println(val)
+		}
+	}
 	return 0
 }
 

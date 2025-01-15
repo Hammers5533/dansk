@@ -4,6 +4,7 @@ import (
 	"dklang/token"
 	"fmt"
 	"reflect"
+	"strings"
 )
 
 // Expressions
@@ -105,6 +106,50 @@ func (b BinaryExpression) EvalExpression(env *Env) interface{} {
 func (v ValueExpWrapper) EvalExpression(env *Env) interface{} {
 	value := v.Value.EvalValue(env)
 	return value
+}
+
+type FuncCall struct {
+	Name       Exp
+	Parameters []Exp
+}
+
+func (c FuncCall) EvalExpression(env *Env) interface{} {
+	funcVariables := make(map[string]interface{})
+
+	switch t := c.Name.(type) {
+	case Variable:
+
+	}
+	switch value := c.Name.EvalExpression(env).(type) {
+	case string:
+		funcDef, ok := env.Functions[value]
+		if !ok {
+			err := fmt.Sprintf("Undefined function %s", c.Name)
+			panic(err)
+		}
+
+		if len(funcDef.Parameters) != len(c.Parameters) {
+			err := fmt.Sprintf("Input parameters for %s does not match required parameters %s", c.Name, strings.Join(funcDef.Parameters, ", "))
+			panic(err)
+		}
+
+		// Assign expressions to variables
+		for i := range len(funcDef.Parameters) {
+			parameterExp := c.Parameters[i].EvalExpression(env)
+			funcVariables[funcDef.Parameters[i]] = parameterExp
+		}
+
+		functionEnv := &Env{
+			Variables: funcVariables,
+			Functions: env.Functions,
+		}
+
+		return funcDef.Body.EvalStatement(functionEnv)
+	default:
+		err := fmt.Sprintf("Not a valid function call expected string but got %T", value)
+		panic(err)
+	}
+
 }
 
 func checkTypes(left, right interface{}) bool {

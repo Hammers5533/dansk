@@ -36,6 +36,17 @@ func (v Variable) EvalValue(env *Env) interface{} {
 	return val
 }
 
+type FunctionName struct{ Value string }
+
+func (n FunctionName) EvalValue(env *Env) interface{} {
+	val, ok := env.Functions[n.Value]
+	if !ok {
+		s := fmt.Sprintf("Function %s called before assignment", n.Value)
+		panic(s)
+	}
+	return val
+}
+
 type Bool struct{ Value bool }
 
 func (b Bool) EvalValue(env *Env) interface{} {

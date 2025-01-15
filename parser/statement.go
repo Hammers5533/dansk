@@ -99,3 +99,11 @@ func parseFunctionDeclaration(p *Parser) intepreter.Statement {
 	return intepreter.FuncDef{Name: functionName, Parameters: functionParameters, Body: body}
 
 }
+
+func parseReturn(p *Parser) intepreter.Statement {
+	p.expect(token.RETURN)
+
+	returnExp := parseExpression(p, defaultBP)
+	p.expect(token.SEMICOLON)
+	return intepreter.ReturnStatement{Exp: returnExp}
+}

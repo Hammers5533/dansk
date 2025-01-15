@@ -22,7 +22,7 @@ func main() {
 	s := string(buf)
 
 	tokens := lexer.Tokenize(s)
-	litter.Dump(tokens)
+	//litter.Dump(tokens)
 
 	program := parser.ParseProgram(tokens)
 	litter.Dump(program)

@@ -65,22 +65,22 @@ const (
 )
 
 var keywords = map[string]TokenType{
-	"funktion":   FUNCTION,
-	"lad":        LET,
-	"sandt":      TRUE,
-	"falsk":      FALSE,
-	"hvis":       IF,
-	"ellers":     ELSE,
-	"tilbagegiv": RETURN,
-	"i":          IN,
-	"imens":      WHILE,
-	"prøv":       TRY,
-	"medmindre":  EXCEPT,
-	"endligt":    FINALLY,
-	"kast":       THROW,
-	"og":         AND,
-	"eller":      OR,
-	"omvendt":    NOT,
+	"funktion":  FUNCTION,
+	"lad":       LET,
+	"sandt":     TRUE,
+	"falsk":     FALSE,
+	"hvis":      IF,
+	"ellers":    ELSE,
+	"udlever":   RETURN,
+	"i":         IN,
+	"imens":     WHILE,
+	"prøv":      TRY,
+	"medmindre": EXCEPT,
+	"endligt":   FINALLY,
+	"kast":      THROW,
+	"og":        AND,
+	"eller":     OR,
+	"omvendt":   NOT,
 }
 
 func CheckIdentifier(identifier string) TokenType {

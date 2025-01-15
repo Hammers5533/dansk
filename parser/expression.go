@@ -44,6 +44,24 @@ func parseBinaryExpression(p *Parser, leftExpression intepreter.Exp, bp bindingP
 	return intepreter.BinaryExpression{Left: leftExpression, Operator: operatorToken, Right: rightExpression}
 }
 
+func parseFunctionCall(p *Parser, leftExpression intepreter.Exp, bp bindingPower) intepreter.Exp {
+	p.expect(token.LEFTPARENTHESIS)
+
+	expressions := make([]intepreter.Exp, 0)
+
+	for p.hasTokens() && p.currentTokenType() != token.RIGHTPARENTHESIS {
+		exp := parseExpression(p, defaultBP)
+		expressions = append(expressions, exp)
+
+		if p.currentTokenType() != token.RIGHTPARENTHESIS {
+			p.expect(token.DOT)
+		}
+	}
+	p.expect(token.RIGHTPARENTHESIS)
+
+	return intepreter.FuncCall{Name: leftExpression, Parameters: expressions}
+}
+
 func parseGroupExpression(p *Parser) intepreter.Exp {
 	p.expect(token.LEFTPARENTHESIS)
 	expression := parseExpression(p, defaultBP)

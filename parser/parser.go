@@ -20,7 +20,15 @@ func ParseProgram(tokens []token.Token) *intepreter.Program {
 	p := New(tokens)
 
 	program := &intepreter.Program{}
-	program.Body = parseManyStatements(p)
+	statements := []intepreter.Statement{}
+
+	for p.hasTokens() {
+		stmt := parseStatement(p)
+		if stmt != nil {
+			statements = append(statements, stmt)
+		}
+	}
+	program.Body = statements
 
 	return program
 }

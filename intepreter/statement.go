@@ -37,6 +37,13 @@ func (e ExpStatementWrapper) EvalStatement(env *Env) interface{} {
 	return value
 }
 
+type ReturnStatement struct{ Exp Exp }
+
+func (r ReturnStatement) EvalStatement(env *Env) interface{} {
+	value := r.Exp.EvalExpression(env)
+	return value
+}
+
 type FuncDef struct {
 	Name       string
 	Parameters []string
