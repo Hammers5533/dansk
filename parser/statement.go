@@ -1,9 +1,10 @@
 package parser
 
 import (
-	"dklang/intepreter"
-	"dklang/token"
 	"fmt"
+
+	"github.com/Hammers5533/dklang/intepreter"
+	"github.com/Hammers5533/dklang/token"
 )
 
 func parseManyStatements(p *Parser) intepreter.Statement {

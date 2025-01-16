@@ -1,10 +1,11 @@
 package intepreter
 
 import (
-	"dklang/token"
 	"fmt"
 	"reflect"
 	"strings"
+
+	"github.com/Hammers5533/dklang/token"
 )
 
 // Expressions

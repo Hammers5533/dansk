@@ -1,9 +1,10 @@
 package main
 
 import (
-	"dklang/lexer"
-	"dklang/parser"
 	"os"
+
+	"github.com/Hammers5533/dklang/lexer"
+	"github.com/Hammers5533/dklang/parser"
 )
 
 func main() {

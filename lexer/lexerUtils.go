@@ -1,8 +1,9 @@
 package lexer
 
 import (
-	"dklang/token"
 	"unicode"
+
+	"github.com/Hammers5533/dklang/token"
 )
 
 func (l *Lexer) currentRune() rune {

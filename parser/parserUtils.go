@@ -1,8 +1,9 @@
 package parser
 
 import (
-	"dklang/token"
 	"fmt"
+
+	"github.com/Hammers5533/dklang/token"
 )
 
 func (p *Parser) currentToken() token.Token {

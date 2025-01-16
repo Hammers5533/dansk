@@ -1,11 +1,12 @@
 package parser
 
 import (
-	"dklang/intepreter"
-	"dklang/token"
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/Hammers5533/dklang/intepreter"
+	"github.com/Hammers5533/dklang/token"
 )
 
 func parseExpression(p *Parser, bp bindingPower) intepreter.Exp {

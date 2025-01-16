@@ -1,8 +1,9 @@
 package lexer
 
 import (
-	"dklang/token"
 	"unicode"
+
+	"github.com/Hammers5533/dklang/token"
 )
 
 type Lexer struct {
