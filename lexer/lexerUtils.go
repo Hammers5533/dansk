@@ -47,7 +47,7 @@ func (l *Lexer) readDigit() (string, token.TokenType) {
 
 func (l *Lexer) readIdentifier() string {
 	startPosition := l.currentPosition
-	for unicode.IsLetter(l.currentRune()) || unicode.IsDigit(l.currentRune()) {
+	for unicode.IsLetter(l.currentRune()) || unicode.IsDigit(l.currentRune()) || l.currentRune() == '_' {
 		l.advance()
 	}
 	return string(l.input[startPosition:l.currentPosition])

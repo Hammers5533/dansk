@@ -116,18 +116,8 @@ type FuncCall struct {
 func (c FuncCall) EvalExpression(env *Env) interface{} {
 	funcVariables := make(map[string]interface{})
 
-	switch t := c.Name.(type) {
-	case Variable:
-
-	}
-	switch value := c.Name.EvalExpression(env).(type) {
-	case string:
-		funcDef, ok := env.Functions[value]
-		if !ok {
-			err := fmt.Sprintf("Undefined function %s", c.Name)
-			panic(err)
-		}
-
+	switch funcDef := c.Name.EvalExpression(env).(type) {
+	case FuncDef:
 		if len(funcDef.Parameters) != len(c.Parameters) {
 			err := fmt.Sprintf("Input parameters for %s does not match required parameters %s", c.Name, strings.Join(funcDef.Parameters, ", "))
 			panic(err)
@@ -140,16 +130,28 @@ func (c FuncCall) EvalExpression(env *Env) interface{} {
 		}
 
 		functionEnv := &Env{
+			ParentEnv: env,
 			Variables: funcVariables,
-			Functions: env.Functions,
 		}
 
 		return funcDef.Body.EvalStatement(functionEnv)
+	case InternalFunc:
+		if len(funcDef.Parameters) != len(c.Parameters) {
+			err := fmt.Sprintf("Input parameters for %s does not match required parameters %s", c.Name, strings.Join(funcDef.Parameters, ", "))
+			panic(err)
+		}
+
+		parameters := []any{}
+		for i := range len(funcDef.Parameters) {
+			parameterExp := c.Parameters[i].EvalExpression(env)
+			parameters = append(parameters, parameterExp)
+		}
+
+		return funcDef.Func(parameters...)
 	default:
-		err := fmt.Sprintf("Not a valid function call expected string but got %T", value)
+		err := fmt.Sprintf("Type %T is not a callable method", funcDef)
 		panic(err)
 	}
-
 }
 
 func checkTypes(left, right interface{}) bool {

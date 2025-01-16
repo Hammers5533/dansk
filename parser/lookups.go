@@ -89,4 +89,5 @@ func createTokenLookups() {
 	statement(token.FUNCTION, parseFunctionDeclaration)
 	statement(token.LET, parseAssignment)
 	statement(token.RETURN, parseReturn)
+	statement(token.IF, parseIf)
 }

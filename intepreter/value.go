@@ -28,21 +28,11 @@ func (s String) EvalValue(env *Env) interface{} {
 type Variable struct{ Value string }
 
 func (v Variable) EvalValue(env *Env) interface{} {
-	val, ok := env.Variables[v.Value]
-	if !ok {
-		s := fmt.Sprintf("Variable %s referenced before assignment", v.Value)
-		panic(s)
-	}
-	return val
-}
+	val, ok := env.checkVariable(v.Value)
 
-type FunctionName struct{ Value string }
-
-func (n FunctionName) EvalValue(env *Env) interface{} {
-	val, ok := env.Functions[n.Value]
 	if !ok {
-		s := fmt.Sprintf("Function %s called before assignment", n.Value)
-		panic(s)
+		err := fmt.Sprintf("Identifier %s not defined\n", v.Value)
+		panic(err)
 	}
 	return val
 }
@@ -51,4 +41,21 @@ type Bool struct{ Value bool }
 
 func (b Bool) EvalValue(env *Env) interface{} {
 	return b.Value
+}
+
+type FuncDef struct {
+	Name       string
+	Parameters []string
+	Body       Statement
+}
+
+func (f FuncDef) EvalValue(env *Env) interface{} {
+	env.Variables[f.Name] = f
+	return true
+}
+
+type InternalFunc struct {
+	Name       string
+	Parameters []string
+	Func       func(...any) any
 }

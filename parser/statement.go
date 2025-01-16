@@ -23,7 +23,6 @@ func parseStatement(p *Parser) intepreter.Statement {
 	if exists {
 		return statementFun(p)
 	}
-
 	return parseExpressionStatement(p)
 
 }
@@ -96,8 +95,7 @@ func parseFunctionDeclaration(p *Parser) intepreter.Statement {
 
 	p.expect(token.RIGHTBRACE)
 
-	return intepreter.FuncDef{Name: functionName, Parameters: functionParameters, Body: body}
-
+	return intepreter.ExpStatementWrapper{Exp: intepreter.ValueExpWrapper{Value: intepreter.FuncDef{Name: functionName, Parameters: functionParameters, Body: body}}}
 }
 
 func parseReturn(p *Parser) intepreter.Statement {
@@ -106,4 +104,34 @@ func parseReturn(p *Parser) intepreter.Statement {
 	returnExp := parseExpression(p, defaultBP)
 	p.expect(token.SEMICOLON)
 	return intepreter.ReturnStatement{Exp: returnExp}
+}
+
+func parseIf(p *Parser) intepreter.Statement {
+	p.expect(token.IF)
+	p.expect(token.LEFTPARENTHESIS)
+
+	conditionExp := parseExpression(p, defaultBP)
+
+	p.expect(token.RIGHTPARENTHESIS)
+	p.expect(token.LEFTBRACE)
+
+	IfBody := parseManyStatements(p)
+
+	p.expect(token.RIGHTBRACE)
+
+	var ElseBody intepreter.Statement = intepreter.Body{}
+	if p.currentTokenType() == token.ELSE {
+		p.expect(token.ELSE)
+		p.expect(token.LEFTBRACE)
+
+		ElseBody = parseManyStatements(p)
+
+		p.expect(token.RIGHTBRACE)
+	}
+
+	return intepreter.IfStatement{
+		Condition: conditionExp,
+		IfBody:    IfBody,
+		ElseBody:  ElseBody,
+	}
 }

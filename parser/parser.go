@@ -28,7 +28,7 @@ func ParseProgram(tokens []token.Token) *intepreter.Program {
 			statements = append(statements, stmt)
 		}
 	}
-	program.Body = statements
+	program.Body = intepreter.Body{Body: statements}
 
 	return program
 }

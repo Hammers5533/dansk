@@ -1,31 +1,31 @@
 package intepreter
 
-import (
-	"fmt"
-)
-
 type Program struct {
-	Body []Statement
+	Body Body
 }
 
 func (p Program) Run() int {
 	env := &Env{
+		ParentEnv: nil,
 		Variables: make(map[string]interface{}),
-		Functions: make(map[string]FuncDef),
 	}
-	for _, statement := range p.Body {
-		switch statement.(type) {
-		case Body:
-			panic("Cannot parse body inside another body")
-		default:
-			val := statement.EvalStatement(env)
-			fmt.Println(val)
-		}
-	}
+	env.Variables["meddel"] = builtinPrint
+	p.Body.EvalStatement(env)
 	return 0
 }
 
 type Env struct {
+	ParentEnv *Env
 	Variables map[string]interface{}
-	Functions map[string]FuncDef
+}
+
+func (env *Env) checkVariable(name string) (interface{}, bool) {
+	val, ok := env.Variables[name]
+	if ok {
+		return val, true
+	}
+	if env.ParentEnv == nil {
+		return nil, false
+	}
+	return env.ParentEnv.checkVariable(name)
 }
