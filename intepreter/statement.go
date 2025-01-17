@@ -1,6 +1,8 @@
 package intepreter
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // Statements
 type Statement interface {
@@ -12,24 +14,21 @@ type Body struct {
 }
 
 func (b Body) EvalStatement(env *Env) interface{} {
-
 	for i := range len(b.Body) {
-		switch statement := b.Body[i].(type) {
-		case ReturnStatement:
-			return statement.EvalStatement(env)
-		default:
-			b.Body[i].EvalStatement(env)
+		switch value := b.Body[i].EvalStatement(env).(type) {
+		case ReturnValue:
+			return value
 		}
 	}
 	return nil
 }
 
-type Assign struct {
+type AssignStatement struct {
 	Name  string
 	Value Exp
 }
 
-func (a Assign) EvalStatement(env *Env) interface{} {
+func (a AssignStatement) EvalStatement(env *Env) interface{} {
 	value := a.Value.EvalExpression(env)
 	env.Variables[a.Name] = value
 	return true
@@ -48,7 +47,7 @@ func (r ReturnStatement) EvalStatement(env *Env) interface{} {
 		panic("Return statement in top level")
 	}
 	value := r.Exp.EvalExpression(env)
-	return value
+	return ReturnValue{Value: value}
 }
 
 type IfStatement struct {
@@ -69,4 +68,29 @@ func (i IfStatement) EvalStatement(env *Env) interface{} {
 		err := fmt.Sprintf("Cannot determine condition of type %T", condition)
 		panic(err)
 	}
+}
+
+type WhileStatement struct {
+	Condition Exp
+	Body      Statement
+}
+
+func (w WhileStatement) EvalStatement(env *Env) interface{} {
+loop:
+	for {
+		switch condition := w.Condition.EvalExpression(env).(type) {
+		case bool:
+			if !condition {
+				break loop
+			}
+		default:
+			err := fmt.Sprintf("Cannot determine condition of type %T", condition)
+			panic(err)
+		}
+		switch value := w.Body.EvalStatement(env).(type) {
+		case ReturnValue:
+			return value
+		}
+	}
+	return nil
 }

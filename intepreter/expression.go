@@ -135,7 +135,13 @@ func (c FuncCall) EvalExpression(env *Env) interface{} {
 			Variables: funcVariables,
 		}
 
-		return funcDef.Body.EvalStatement(functionEnv)
+		switch value := funcDef.Body.EvalStatement(functionEnv).(type) {
+		case ReturnValue:
+			return value.Value
+		default:
+			err := fmt.Sprintf("Expected return value for function call but got %T", value)
+			panic(err)
+		}
 	case InternalFunc:
 		if len(funcDef.Parameters) != len(c.Parameters) {
 			err := fmt.Sprintf("Input parameters for %s does not match required parameters %s", c.Name, strings.Join(funcDef.Parameters, ", "))
@@ -153,6 +159,32 @@ func (c FuncCall) EvalExpression(env *Env) interface{} {
 		err := fmt.Sprintf("Type %T is not a callable method", funcDef)
 		panic(err)
 	}
+}
+
+type AssignExpression struct {
+	Name  Exp
+	Value Exp
+}
+
+func (a AssignExpression) EvalExpression(env *Env) interface{} {
+
+	switch Name := a.Name.(type) {
+	case ValueExpWrapper:
+		switch Wrapper := Name.Value.(type) {
+		case Variable:
+			_, ok := env.Variables[Wrapper.Value]
+			if !ok {
+				err := fmt.Sprintf("Cannot assign value to indefined variable %s", Wrapper.Value)
+				panic(err)
+			}
+			env.Variables[Wrapper.Value] = a.Value.EvalExpression(env)
+		default:
+			panic("Cannot Assign value to non-identifier")
+		}
+	default:
+		panic("Cannot assign value to expression")
+	}
+	return true
 }
 
 func checkTypes(left, right interface{}) bool {

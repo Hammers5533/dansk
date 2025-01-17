@@ -93,3 +93,36 @@ func parseValue(p *Parser) intepreter.Exp {
 		panic(err)
 	}
 }
+
+func parseAssignmentExpression(p *Parser, left intepreter.Exp, bp bindingPower) intepreter.Exp {
+	switch p.advance().Type {
+	case token.ASSIGN:
+		right := parseExpression(p, bp)
+		return intepreter.AssignExpression{
+			Name:  left,
+			Value: right,
+		}
+	case token.PLUSASSIGN:
+		right := parseExpression(p, bp)
+		return intepreter.AssignExpression{
+			Name: left,
+			Value: intepreter.BinaryExpression{
+				Left:     left,
+				Operator: token.Token{Type: token.PLUS, Literal: "+"},
+				Right:    right,
+			},
+		}
+	case token.MINUSASSIGN:
+		right := parseExpression(p, bp)
+		return intepreter.AssignExpression{
+			Name: left,
+			Value: intepreter.BinaryExpression{
+				Left:     left,
+				Operator: token.Token{Type: token.MINUS, Literal: "-"},
+				Right:    right,
+			},
+		}
+	default:
+		panic("Not a valid assignment token")
+	}
+}

@@ -1,8 +1,6 @@
 package parser
 
 import (
-	"fmt"
-
 	"github.com/Hammers5533/dklang/intepreter"
 	"github.com/Hammers5533/dklang/token"
 )
@@ -39,39 +37,15 @@ func parseExpressionStatement(p *Parser) intepreter.ExpStatementWrapper {
 
 func parseAssignment(p *Parser) intepreter.Statement {
 	p.expect(token.LET)
+
 	name := p.expect(token.IDENTIFIER)
-	assignmentType := p.advance().Type
+	p.expect(token.ASSIGN)
 
 	expression := parseExpression(p, defaultBP)
 	p.expect(token.SEMICOLON)
-
-	switch assignmentType {
-	case token.ASSIGN:
-		return intepreter.Assign{
-			Name:  name.Literal,
-			Value: expression,
-		}
-	case token.PLUSASSIGN:
-		return intepreter.Assign{
-			Name: name.Literal,
-			Value: intepreter.BinaryExpression{
-				Left:     intepreter.ValueExpWrapper{Value: intepreter.Variable{Value: name.Literal}},
-				Operator: token.Token{Type: token.PLUS, Literal: "+"},
-				Right:    expression,
-			},
-		}
-	case token.MINUSASSIGN:
-		return intepreter.Assign{
-			Name: name.Literal,
-			Value: intepreter.BinaryExpression{
-				Left:     intepreter.ValueExpWrapper{Value: intepreter.Variable{Value: name.Literal}},
-				Operator: token.Token{Type: token.MINUS, Literal: "-"},
-				Right:    expression,
-			},
-		}
-	default:
-		err := fmt.Sprintf("Not a valid assignment token %s", assignmentType)
-		panic(err)
+	return intepreter.AssignStatement{
+		Name:  name.Literal,
+		Value: expression,
 	}
 }
 
@@ -134,5 +108,24 @@ func parseIf(p *Parser) intepreter.Statement {
 		Condition: conditionExp,
 		IfBody:    IfBody,
 		ElseBody:  ElseBody,
+	}
+}
+
+func parseWhile(p *Parser) intepreter.Statement {
+	p.expect(token.WHILE)
+	p.expect(token.LEFTPARENTHESIS)
+
+	conditionExp := parseExpression(p, defaultBP)
+
+	p.expect(token.RIGHTPARENTHESIS)
+	p.expect(token.LEFTBRACE)
+
+	Body := parseManyStatements(p)
+
+	p.expect(token.RIGHTBRACE)
+
+	return intepreter.WhileStatement{
+		Condition: conditionExp,
+		Body:      Body,
 	}
 }

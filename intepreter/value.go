@@ -59,3 +59,7 @@ type InternalFunc struct {
 	Parameters []string
 	Func       func(...any) any
 }
+
+type ReturnValue struct {
+	Value interface{}
+}

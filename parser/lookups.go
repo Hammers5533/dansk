@@ -85,9 +85,15 @@ func createTokenLookups() {
 	// Function Calls
 	led(token.LEFTPARENTHESIS, call, parseFunctionCall)
 
+	// Assignments
+	statement(token.LET, parseAssignment)
+	led(token.ASSIGN, assignment, parseAssignmentExpression)
+	led(token.PLUSASSIGN, assignment, parseAssignmentExpression)
+	led(token.MINUSASSIGN, assignment, parseAssignmentExpression)
+
 	// Statements
 	statement(token.FUNCTION, parseFunctionDeclaration)
-	statement(token.LET, parseAssignment)
 	statement(token.RETURN, parseReturn)
 	statement(token.IF, parseIf)
+	statement(token.WHILE, parseWhile)
 }

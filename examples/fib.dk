@@ -1,0 +1,7 @@
+funktion fib(n) {
+    hvis (n <= 0) {udlever 0;}
+    hvis (n == 1) {udlever 1;}
+    udlever fib(n - 1) + fib(n - 2);
+}
+
+meddel(fib(25));

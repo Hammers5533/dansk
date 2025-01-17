@@ -1,0 +1,6 @@
+lad x = 0;
+
+imens (x < 20) {
+    meddel(x*x);
+    x += 1;
+}

@@ -38,7 +38,7 @@ func (p *Parser) expectError(expectedType token.TokenType, err any) token.Token 
 
 	if tokenType != expectedType {
 		if err == nil {
-			err = fmt.Sprintf("Expected TokenType %s but instead got %s", expectedType, tokenType)
+			err = fmt.Sprintf("Expected TokenType %s but instead got %s at position %d", expectedType, tokenType, token.Position)
 		}
 		panic(err)
 	}
