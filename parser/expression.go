@@ -126,3 +126,43 @@ func parseAssignmentExpression(p *Parser, left intepreter.Exp, bp bindingPower) 
 		panic("Not a valid assignment token")
 	}
 }
+
+func parseArrayExpression(p *Parser) intepreter.Exp {
+	p.expect(token.LEFTBRACKET)
+
+	var values []intepreter.Exp = []intepreter.Exp{}
+
+	for p.currentToken().Type != token.RIGHTBRACKET && p.hasTokens() {
+		exp := parseExpression(p, defaultBP)
+		values = append(values, exp)
+
+		if p.currentToken().Type != token.RIGHTBRACKET && p.hasTokens() {
+			p.expect(token.DOT)
+		}
+	}
+	p.expect(token.RIGHTBRACKET)
+	return intepreter.ValueExpWrapper{Value: intepreter.List{Value: values}}
+}
+
+func parseMemberExpression(p *Parser, left intepreter.Exp, bp bindingPower) intepreter.Exp {
+	p.expect(token.LEFTBRACKET)
+
+	index := parseExpression(p, defaultBP)
+
+	p.expect(token.RIGHTBRACKET)
+
+	return intepreter.MemberExpression{
+		Member: left,
+		Index:  index,
+	}
+}
+
+func parsePrefixExpression(p *Parser) intepreter.Exp {
+	operatorToken := p.advance()
+	expression := parseExpression(p, unary)
+
+	return intepreter.PrefixExpression{
+		Operator: operatorToken,
+		Right:    expression,
+	}
+}

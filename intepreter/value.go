@@ -63,3 +63,11 @@ type InternalFunc struct {
 type ReturnValue struct {
 	Value interface{}
 }
+
+type List struct {
+	Value []Exp
+}
+
+func (l List) EvalValue(env *Env) interface{} {
+	return l
+}

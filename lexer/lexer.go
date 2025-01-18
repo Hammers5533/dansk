@@ -85,6 +85,10 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.LEFTBRACE, Rune, RuneStartPosition)
 	case '}':
 		tok = newToken(token.RIGHTBRACE, Rune, RuneStartPosition)
+	case '[':
+		tok = newToken(token.LEFTBRACKET, Rune, RuneStartPosition)
+	case ']':
+		tok = newToken(token.RIGHTBRACKET, Rune, RuneStartPosition)
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF

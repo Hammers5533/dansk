@@ -81,6 +81,12 @@ func createTokenLookups() {
 
 	// Grouping
 	nud(token.LEFTPARENTHESIS, parseGroupExpression)
+	nud(token.LEFTBRACKET, parseArrayExpression)
+	led(token.LEFTBRACKET, member, parseMemberExpression)
+
+	// Prefix
+	nud(token.MINUS, parsePrefixExpression)
+	nud(token.NOT, parsePrefixExpression)
 
 	// Function Calls
 	led(token.LEFTPARENTHESIS, call, parseFunctionCall)

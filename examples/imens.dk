@@ -1,6 +1,18 @@
-lad x = 0;
 
-imens (x < 20) {
-    meddel(x*x);
-    x += 1;
+funktion er_69_i_tabel(tal) {
+    hvis (tal <= 0) {
+        udlever falsk;
+    }
+    lad k = 0;
+    imens (k <= 69) {
+        hvis (k == 69) {
+            udlever sandt;
+        } 
+        ellers {
+            k += tal;
+        }
+    }
+    udlever falsk;
 }
+
+meddel(er_69_i_tabel(3));

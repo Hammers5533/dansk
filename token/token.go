@@ -47,6 +47,8 @@ const (
 	RIGHTPARENTHESIS = ")"
 	LEFTBRACE        = "{"
 	RIGHTBRACE       = "}"
+	LEFTBRACKET      = "["
+	RIGHTBRACKET     = "]"
 
 	FUNCTION = "FUNCTION"
 	LET      = "LET"

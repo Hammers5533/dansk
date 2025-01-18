@@ -187,6 +187,64 @@ func (a AssignExpression) EvalExpression(env *Env) interface{} {
 	return true
 }
 
+type MemberExpression struct {
+	Member Exp
+	Index  Exp
+}
+
+func (m MemberExpression) EvalExpression(env *Env) interface{} {
+	index := m.Index.EvalExpression(env)
+	switch t := index.(type) {
+	case int:
+		switch list := m.Member.EvalExpression(env).(type) {
+		case List:
+			if t >= len(list.Value) {
+				err := fmt.Sprintf("Index %d outside range of array of length %d", index, len(list.Value))
+				panic(err)
+			} else {
+				return list.Value[t].EvalExpression(env)
+			}
+		default:
+			err := fmt.Sprintf("Cannot take index of %T", list)
+			panic(err)
+		}
+	default:
+		err := fmt.Sprintf("Index must be of type int, but got %T", t)
+		panic(err)
+	}
+}
+
+type PrefixExpression struct {
+	Operator token.Token
+	Right    Exp
+}
+
+func (p PrefixExpression) EvalExpression(env *Env) interface{} {
+	switch p.Operator.Type {
+	case token.NOT:
+		switch value := p.Right.EvalExpression(env).(type) {
+		case bool:
+			return !value
+		default:
+			err := fmt.Sprintf("Cannot negate expression of type %T", value)
+			panic(err)
+		}
+	case token.MINUS:
+		switch value := p.Right.EvalExpression(env).(type) {
+		case int:
+			return -value
+		case float64:
+			return -value
+		default:
+			err := fmt.Sprintf("Cannot multiply %T by -1", value)
+			panic(err)
+		}
+	default:
+		err := fmt.Sprintf("Operator token %s not a valid prefix", p.Operator.Type)
+		panic(err)
+	}
+}
+
 func checkTypes(left, right interface{}) bool {
 	return reflect.TypeOf(left) == reflect.TypeOf(right)
 }
