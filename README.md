@@ -1,9 +1,6 @@
 # Dansk
 dansk er et simpel og intuitivt programmeringssprog, der er designet til at gøre koding mere tilgængeligt ved at bruge dansk ordforråd og syntaks. Sproget understøtter grundlæggende programmeringselementer som variabler, funktioner, løkker og rækker. Det er perfekt til begyndere, men kan også bruges til mere komplekse opgaver.
 
-# Grundlæggende syntaks i dansk
-Her er en kort forklaring af de grundlæggende syntaksregler i dansk.
-
 # Eksempler på kode i *dansk*
 
 ### Eksempel 1: Summen af de første n tal
