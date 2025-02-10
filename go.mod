@@ -1,4 +1,4 @@
-module github.com/Hammers5533/dklang
+module github.com/Hammers5533/dansk
 
 go 1.22.6
 
