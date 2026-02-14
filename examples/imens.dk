@@ -1,11 +1,11 @@
 
-funktion er_69_i_tabel(tal) {
+funktion er_42_i_tabel(tal) {
     hvis (tal <= 0) {
         udlever falsk;
     }
     lad k = 0;
-    imens (k <= 69) {
-        hvis (k == 69) {
+    imens (k <= 42) {
+        hvis (k == 42) {
             udlever sandt;
         } 
         ellers {
@@ -15,4 +15,4 @@ funktion er_69_i_tabel(tal) {
     udlever falsk;
 }
 
-meddel(er_69_i_tabel(3));
+meddel(er_42_i_tabel(3));
